@@ -1,0 +1,87 @@
+\linespread{1.1}         			% Palatino needs more leading (space between lines)
+\chapter{Actions entreprises et Résultats}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{Chapitre-4}
+\minitoc
+\linespread{1.2}         			% Palatino needs more leading (space between lines)
+\newpage
+
+\section{Introduction}
+%---------------------
+Dans ce chapitre, nous allons monter comment afficher des tableaux avec LaTeX.
+
+\section{Actions entreprises}
+%-------------------------
+
+\subsection{Exemple d'un tableau n° 1}
+%------------------------------------
+
+ \begin{table}[htb]
+		\begin{tabular}{|p{1cm}|p{0.5cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|} % Les tailles des différentes colonnes
+	    \hline
+			{\footnotesize\textbf{---}} &	{\footnotesize\textbf{C1}}& {\footnotesize\textbf{C2}}& {\footnotesize\textbf{C3}} & \footnotesize\textbf{C4} & {\footnotesize\textbf{C5}} \\
+			\hline
+			{\footnotesize L1}  & {\footnotesize x}	& {\footnotesize x} & {\footnotesize x} & &	{\footnotesize x}\\
+			\hline
+			{\footnotesize L2}  & {\footnotesize x}	& {\footnotesize x} & {\footnotesize x} & &	{\footnotesize x}\\
+			\hline
+			... & & ...&...&...& \\  % Ligne etc ...
+			\hline
+			{\footnotesize L7}  & {\footnotesize x}	& {\footnotesize x} & {\footnotesize x} & &	{\footnotesize x}\\
+			\hline
+			{\footnotesize L8} & {\footnotesize x} & {\footnotesize x} & {\footnotesize x} & {\footnotesize x} & {\footnotesize $X_{i}$ 
+			
+			$Y_{i}$ : Ok.}\\
+			\hline
+			... & & ...&...&...& \\  % Ligne etc ...
+			\hline
+			{\footnotesize Ln} & {\footnotesize x} & {\footnotesize x} & {\footnotesize x} & {\footnotesize x} & {\footnotesize x}\\
+			\hline
+			... & & ...&...&...& \\
+			\hline
+		\end{tabular}
+	
+	\caption{Exemple d'un tableau n°1}
+	\label{tab:Tableau1}
+\end{table}
+
+\subsection{Exemple d'un tableau n°2}
+%------------------------------------
+\begin{center}	
+	\begin{table}[htb]
+		
+		\begin{tabular}{|p{3cm}|p{4cm}|p{2.5cm}|p{3.5cm}|}
+			\hline  &\textbf{ Cisco SD-Access	}&\textbf{HPE-Aruba} & \textbf{Huawei agile campus}\\	
+			\hline 
+			\textbf{Management} & Cisco DNA Center & AirWave & eSight\\
+			\hline 
+			\textbf{Policy} & ISE & ClearPass & Agile Controller \\
+			\hline
+			\textbf{Configuration of shared services} & DHCP, AAA, DNS, SNMP, CLI Credentials & AAA, SNMP & DHCP, SNMP, CLI Credentials\\
+			\hline
+			\textbf{	Network Profile} & Wireless, Switches, Routing, Authentication methods & Wireless Only & Wireless and Wired using easy operations (SVF parent) or eSight \\
+			\hline
+			\textbf{Deployment time} & 1-2 hours & 5-6 hours & 1-2 jours\\
+			\hline 
+		
+		\end{tabular}
+		\caption{Exemlpe d'un tableau n° 2}
+	
+	\end{table}
+	
+\end{center}
+
+\section{Test de la solution et résultats}
+%----------------------------------------
+
+\subsection{Expérimentation de la solution}
+%------------------------------------
+\subsection{Comparaison des résultats}
+%------------------------------------
+
+
+
+\section{Conclusion}
+%%%%%%%%%%%%%%%%%%%%%%
+
+Dans ce chapitre nous avons proposé une solution ....

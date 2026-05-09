@@ -1,0 +1,213 @@
+\linespread{1.1}         			% Palatino needs more leading (space between lines)
+\chapter{Etude et comparaison de plusieurs solutions - Choix de la solution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{Chapitre-3}
+\minitoc
+\linespread{1.2}         			% Palatino needs more leading (space between lines)
+\newpage
+
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%
+Ce chapitre, extrait d'une thèse, reflète l'utilisation de plusieurs caractéristiques de LaTeX : formules mathématiques, algorithme, figures, indice, exposant, ...
+
+\section{Définitions et Notations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dans cette section, nous allons commencer par quelques notations et définitions classiques sur les graphes que nous utiliserons dans la suite de ce rapport.
+
+\noindent Un {\bfseries graphe} $G=(V,E)$ est une structure formée d'un ensemble $V$ de $n$ n{\oe}uds ou sommets, et d'un ensemble $E \subseteq V\times V$ de $m$ arêtes reliant ces n{\oe}uds.  
+
+\noindent Soient les sommets $u,v \in V$, si $(u,v)\in E$ (respectivement $(v,u)\in E$) alors $(u,v)$ (respectivement $(v,u)$) est appelée {\bfseries arête incidente} aux sommets $u$ et $v$ (respectivement aux sommets $v$ et $u$).
+
+\noindent Un {\bfseries sous-graphe} d'un graphe orienté ou non est le graphe obtenu en supprimant certains sommets et toutes les arêtes incidentes aux sommets supprimés. Par conséquent, $G'=(V',E')$ est un sous-graphe de $G=(V,E)$ si et seulement si $V'\subseteq V$ et $E'=E \cap (V'\times V')$.
+
+\noindent Deux sommets $u$ et $v$ d'un graphe $G=(V,E)$ sont dit {\bfseries adjacents}, s'ils sont reliés par une arête, c'est-à-dire $(u,v)\in E$ ou $(v,u)\in E$.
+
+\noindent Un {\bfseries graphe étiqueté} est défini par un tuple $G=(V,E,L_{V},\alpha,L_{E},\beta)$, où :
+\begin{itemize}
+\item $V$ est un ensemble de sommets;
+\item $E\subseteq V\times V$ est l'ensemble des arcs entre ces sommets;
+\item $L_{V}$ est un ensemble d'étiquettes de sommets;
+\item $\alpha:V \rightarrow L_{V}$ est une application attribuant une étiquette à chaque sommet de $G$;
+\item $L_{E}$ est un ensemble d'étiquettes d'arcs;
+\item $\beta:E \rightarrow L_{E}$ est une application attribuant une étiquette à chaque arc du graphe.
+\end{itemize}
+
+
+\section {Plus grand sous-graphe commun}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Le principe est le suivant : $g_{3}$ est un plus grand sous-graphe commun à deux graphes $g_{1}$ et $g_{2}$ (noté $mcs(g_{1},g_{2})$ pour {\itshape maximum common subgraph}), si $g_{3}$ est un sous-graphe commun à $g_{1}$ et $g_{2}$ ayant un nombre de sommets maximum, c'est-à-dire qu'il n'existe aucun autre sous-graphe commun à $g_{1}$ et $g_{2}$ avec un ordre (ou nombre de sommets) strictement plus grand que celui de $g_{3}$ (voir exemple de la figure \ref{fig:exemple-sous-graphe-commun}). 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.5]{images/exemple-sous-graphe-commun.pdf}
+	\caption{Exemple de sous-graphe commun. $g_{3}$ est un plus grand sous-graphe commun à $g_{1}$ et $g_{2}$.}%
+	\label{fig:exemple-sous-graphe-commun}
+\end{figure}
+
+Dans \citep{Bunke1998,Bunke2000}, \textsc{Bunke} propose de définir une mesure de similarité entre deux graphes basée sur la méthode du plus grand sous-graphe commun par :
+
+\begin{equation}
+   \fbox{$
+   d(g_{1},g_{2})=1-\frac{|mcs(g_{1},g_{2})|}{max(|g_{1}|,|g_{2}|)}
+   $}
+\end{equation}
+
+\noindent où $|mcs(g_{1},g_{2})|$ est le nombre de sommets du plus grand sous-graphe commun à $g_{1}$ et $g_{2}$, $|g_{1}|$ (respectivement $|g_{2}|$) est le nombre de sommets du graphe $g_{1}$ (respectivement $g_{2}$) et $0\leq d(g_{1},g_{2})\leq 1$. 
+
+Ce que nous pouvons constater à partir de cette équation est que, plus le nombre d'ordre du \og plus grand sous-graphe commun\fg{} est grand, plus le rapport $\frac{|mcs(g_{1},g_{2})|}{max(|g_{1}|,|g_{2}|)}$ est proche de $1$, et donc $d(g_{1},g_{2})$ est proche de $0$. Ce qui signifie que meilleure est la similarité entre les deux graphes.
+
+Toujours selon \textsc{Bunke}, cette mesure est une {\itshape distance métrique} et respecte donc les conditions suivantes :
+\begin{itemize}
+\item $d(g_{1},g_{2})=0 \leftrightarrow$ $g_{1}$ et $g_{2}$ sont isomorphes \footnote{ Les deux graphes ont une structure identique.}.
+\item $d(g_{1},g_{2})=d(g_{2},g_{1})$
+\item $d(g_{1},g_{3})\leq d(g_{1},g_{2})+d(g_{2},g_{3})$\\
+\end{itemize}
+
+Dans la suite, nous allons nous intéresser à une autre méthode d'appariement qui permet, en plus de calculer la similarité entre graphes, de détecter leurs différences.
+
+\section {Distance d'édition de graphes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{section:GED}
+
+\subsection {Définition}
+%-----------------------
+Une alternative à la mesure de similarité construite à partir du \og plus grand sous-graphe commun \fg{} est la distance d'édition de graphe \citep{Bunke1997}. Cette méthode est très largement utilisée pour déterminer des appariements de graphes tolérants aux erreurs. Dans \citep{Bunke1983,Messmer1998,Neuhaus2006,Riesen2008}, \textsc{Bunke} a proposé plusieurs algorithmes de mesure de similarité basés sur la distance d'édition de graphes ou \og Graph Edit Distance (GED)\fg. Le principe de ces algorithmes est le suivant : étant donné deux graphes
+$g_{1}$ et $g_{2}$, l'idée est d'appliquer une séquence de transformations (ou d'opérations d'édition) sur $g_{1}$ (insertion, substitution et suppression de sommets ou d'arcs) pour finalement transformer $g_{1}$ en $g_{2}$. Ce processus tend à déformer le modèle du graphe initial jusqu'à ce
+qu'il s'identifie avec le modèle de l'autre graphe.
+
+Chaque transformation ayant un coût prédéfini, le coût d'une séquence de transformations est égale à la somme pondérée des coûts de chaque transformation. La séquence de transformations qui obtient un coût minimal représente la distance d'édition entre les deux graphes \citep{Bunke1997} :
+
+\begin{equation}
+   \fbox{$
+   d(g_{1},g_{2})= \min\limits_{t\in E(g_{1},g_{2})}\{\sum\limits_{i=1}^{k=card(t)} c(e_{i})\}
+   $}
+\end{equation}
+
+\og $e_{i}$ \fg{} est appelé une opération d'édition. \og $t=(e_{1},....e_{k})$ \fg{} est une séquence d'opérations d'édition transformant $g_{1}$ en $g_{2}$, aussi appelé \og chemin d'édition complet\fg.
+
+Un \og \textbf{chemin d'édition complet}\fg{} est une séquence de transformations qui permettent de transformer complètement $g_{1}$ en $g_{2}$. D'un autre côté, un \og \textbf{chemin d'édition partiel}\fg{} est une séquence de transformations qui permettent de transformer partiellement $g_{1}$ afin de s'approcher de la forme de $g_{2}$. 
+
+$E(g_{1},g_{2})$ est l'ensemble des séquences d'opérations d'édition qui permettent de transformer $g_{1}$ en $g_{2}$. \og $c$ \fg{} est la fonction qui assigne un coût à une opération d'édition \og $e$\fg.
+
+\subsection {Opérations d'édition}
+%---------------------------------
+Comme nous venons de le voir, une opération d'édition transforme partiellement un graphe. Une transformation est effectuée soit sur un sommet, soit sur un arc. \`{A} chaque transformation est associé un coût \citep{Bunke1983}. 
+
+\noindent Il existe six types de transformations possibles :
+\begin{itemize}
+\item {\itshape Substitution de sommet} : cette opération correspond au remplacement d'un sommet par un autre. Le coût de cette opération correspond au coût de remplacement entre les deux étiquettes des deux sommets;
+
+\item {\itshape Suppression de sommet} : cette opération correspond à la suppression d'un sommet et de tous les arcs le reliant aux sommets adjacents. Le coût totale de cette opération est égale au coût de suppression d'un sommet, plus les coûts de suppression de tous les arcs incidents à ce sommet;
+
+\item {\itshape Insertion de sommet} : cette opération correspond à l'ajout d'un sommet et éventuellement les arcs le reliant aux autres sommets. Le coût totale de cette opération est égale au coût d'insertion d'un sommet, plus les coûts d'insertion de tous les arcs incidents insérés;
+
+\item {\itshape Substitution d'arc} : cette opération correspond à remplacer un arc par un autre. Le coût de cette opération correspond au coût de remplacement entre les deux étiquettes des deux arcs;
+
+\item {\itshape Suppression d'arc} : cette opération correspond à la suppression d'un arc reliant deux sommets. Le coût de cette opération est égale au coût de suppression d'un arc;
+
+\item {\itshape Insertion d'arc} : cette opération correspond à l'ajout d'un arc entre deux sommets. Le coût de cette opération est égale au coût d'insertion d'un arc.\\
+\end{itemize}
+
+Suivant les valeurs affectées à chaque type de coût (coûts d'insertion, de substitution ou de suppression), la distance d'édition de graphes est une {\itshape distance métrique} \citep{Bunke1983}. Soit $d$ une distance d'édition de graphes. $g_{1}=(V_{1},E_{1})$ et $g_{2}=(V_{2},E_{2})$ deux graphes étiquetés non vide. $d$ est une métrique, si les conditions suivantes sont remplies :
+
+\noindent $\forall$ $n \in V_{1}$ et $v \in V_{2}$ ; $\forall$ $i \in E_{1}$ et $j \in E_{2}$
+\begin{enumerate}[(1)]
+\item $c_{ns}(n,v)=0$ si les deux sommets $n$ et $v$ ont la même étiquette, $c_{ns}(n,v)>0$ sinon, et $c_{es}(i,j)=0$ si les deux arcs $i$ et $j$ ont la même étiquette, $c_{es}(i,j)>0$ sinon;
+\item $c_{nd}(n)>0$, $c_{ni}(n)>0$ et $c_{ed}(i)>0$, $c_{ei}(i)>0$;
+\item $c_{ns}(n,v)=c_{ns}(v,n)$, $c_{nd}(n)=c_{ni}(n)$ et $c_{es}(i,j)=c_{es}(j,i)$, $c_{ed}(i)=c_{ei}(j)$.\\
+\end{enumerate}
+
+\noindent où,
+\begin{itemize}
+\item $c_{ns}(n,v)$ est le coût de substitution du sommet $n$ par le sommet $v$;
+\item $c_{nd}(n)$ est le coût de suppression du sommet $n$;
+\item $c_{ni}(n)$ est le coût d'insertion du sommet $n$;
+\item $c_{es}(i,j)$ est le coût de substitution de l'arc $i$ par l'arc $j$;
+\item $c_{ed}(i)$ est le coût de suppression de l'arc $i$;
+\item $c_{ei}(i)$ est le coût d'insertion de l'arc $i$.
+\end{itemize}
+
+\subsection{Algorithme de calcul de la distance d'édition de graphes}
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nous utiliserons par la suite, l'algorithme de distance d'édition de graphes comme il est défini dans \citep{Neuhaus2006,Riesen2008}. Cet algorithme (cf. Algorithme \ref{alg:GED}), nous garantit l'obtention d'un {\itshape chemin d'édition complet ayant un coût minimal}. La substitution d'un sommet est notée : $u\rightarrow v$, l'insertion d'un sommet est notée : $\varepsilon \rightarrow u$ et la suppression $u \rightarrow \varepsilon$.
+
+\begin{algorithm}[]
+  \caption{Distance d'édition de graphes basée sur l'algorithme A*}
+  \label{alg:GED}
+   \begin{algorithmic}[1]
+    \REQUIRE \hspace{0.5cm}\\
+    	$g_{1}=(V_{1},E_{1},\alpha_{1},\beta_{1})$ et $g_{2}=(V_{2},E_{2},\alpha_{2},\beta_{2})$ deux graphes non vide,\\
+			avec $V_{1}=\{u_{1},...,u_{|V_{1}|}\}$ et $V_{2}=\{v_{1},...,v_{|V_{2}|}\}$\\							
+							
+    \ENSURE \hspace{0.5cm}\\
+    	Un chemin d'édition complet entre $g_{1}$ et $g_{2}$ ayant un coût minimal\\
+    	c'est-à-dire $p_{min}=\{u_{1}\rightarrow v_{3},u_{2}\rightarrow \varepsilon,...,\varepsilon \rightarrow v_{6}\}$\\
+							\hspace{2cm}
+    				
+    \STATE $AR \leftarrow \emptyset$
+    \STATE \textbf{pour chaque} sommet $w \in V_{2}$, insérer la substitution $\{u_{1}\rightarrow w\}$ dans $AR$
+    \STATE \textbf{insérer} la suppression $\{u_{1}\rightarrow \varepsilon\}$ dans $AR$
+
+    \REPEAT
+    \STATE \textbf{enlever} $p_{min} \leftarrow argmin_{p\in AR}\{g(p)+h(p)\}$ de $AR$
+    \IF {$p_{min}$ n'est pas un chemin d'édition complet}
+    \STATE soit $p_{min}=\{u_{1}\rightarrow v_{i_{1}},...,u_{k}\rightarrow v_{i_{k}}\}$
+    \IF {$k<|V_{1}|$}
+    \STATE \textbf{pour chaque} $w \in V_{2}\textbackslash \{v_{i_{1}},...,v_{i_{k}}\}$, insérer $p_{min}\cup \{u_{k+1}\rightarrow w\}$ dans $AR$
+    \STATE \textbf{insérer} $p_{min}\cup \{u_{k+1}\rightarrow \varepsilon\}$ dans $AR$
+    \ELSE
+    \STATE \textbf{insérer} $p_{min}\cup \bigcup_{w\in V_{2}\textbackslash \{v_{i_{1}},...,v_{i_{k}}\}}\{\varepsilon \rightarrow w\}$ dans $AR$
+    \ENDIF
+    \ENDIF
+    \UNTIL{$p_{min}$ soit un chemin d'édition complet}  
+    \STATE \textbf{retourner} $p_{min}$
+  \end{algorithmic}
+\end{algorithm}
+
+Cet algorithme explore toutes les possibilités de correspondances entre les sommets et les arcs du graphe $g_{1}$ par rapport aux sommets et arcs du graphes $g_{2}$ grâce à l'utilisation de l'algorithme de recherche A*. $AR$\footnote{ Arbre de Recherche.} contient la construction dynamique de l'arbre de recherche A* dont les n{\oe}uds $p$ représentent les séquences de transformations partielles\footnote{ Ensemble de transformations entre certains sommets et arcs des graphes $g_{1}$ et $g_{2}$ qui nous rapprochent de la solution finale.}, et les feuilles, les séquences de transformations complètes\footnote{ Ensemble de transformations entre les sommets et arcs des graphes $g_{1}$ et $g_{2}$ correspondant à une solution finale.}. Pour chaque séquence de transformations $p$ de l'arbre de recherche, $g(p)$ est le coût des transformations effectuées, et $h(p)$ est le \og coût estimé\fg{} des transformations restantes jusqu'à la solution finale. Dans le cas où aucune heuristique n'est utilisée, la valeur de $h(p)$ est mise à zéro.
+
+Initialement, $AR$ est vide (ligne 1). Ensuite, toutes les opérations possibles de substitution et suppression sont générées simultanément dans l'arbre de recherche $AR$ pour chaque sommet (lignes 2-3 et 9-10), et si tous les sommets du premier graphe ont été traités, le reste des sommets du deuxième graphe sont insérés dans $AR$ en une seule opération (ligne 12). 
+
+Les opérations d'édition sur les arcs sont implicites par les opérations d'édition sur leurs sommets adjacents, c'est-à-dire, qu'un arc est substitué, supprimé ou inséré en fonction de l'opération d'édition effectuée sur ses sommets adjacents. Soit par exemple les graphes $g_{1}=(V_{1},E_{1})$ et $g_{2}=(V_{2},E_{2})$, et soit $u,u'\in V_{1}\cup\{\varepsilon\}$ et $v,v'\in V_{2}\cup\{\varepsilon\}$. Supposons que les opérations d'édition suivantes $(u\rightarrow v)$ et $(u'\rightarrow v')$ ont été exécutées. Nous distinguons trois cas possibles \citep{Riesen2008}: 
+
+\begin{enumerate}[(1)]
+\item si $e_{1}=(u,u')\in E_{1}$ et $e_{2}=(v,v')\in E_{2}$, alors l'opération de substitution d'un arc $(e_{1}\rightarrow e_{2})$ est implicite par les opérations d'édition ci-dessus; 
+\item si $e_{1}=(u,u')\in E_{1}$ et $e_{2}=(v,v')\notin E_{2}$, alors l'opération de suppression d'un arc $(e_{1}\rightarrow \varepsilon)$ est implicite par les opérations d'édition ci-dessus;
+\item si $e_{1}=(u,u')\notin E_{1}$ et $e_{2}=(v,v')\in E_{2}$, alors l'opération d'insertion d'un arc $(\varepsilon \rightarrow e_{2})$ est implicite par les opérations d'édition ci-dessus.
+\end{enumerate}
+
+\label{GED-temps-de-calcul-infini}
+Finalement, à chaque itération de l'algorithme, un chemin partial $p$ ayant le coût minimum est choisi à partir de l'arbre de recherche (ligne 5). Si $p$ correspond à un chemin d'édition complet (ligne 15), il correspond au chemin d'édition optimal dont le coût est la distance d'édition entre les deux graphes. D'un autre côté, dans le cas où le temps de calcul dépasse un seuil prédéfini, la distance d'édition de graphes correspondante est considérée comme infinie \citep{Neuhaus2006}. Ce dernier cas n'est pas représenté dans l'algorithme.
+
+\subsection{Exemple de calcul de la distance d'édition de graphes}
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nous allons appliquer l'algorithme de la distance d'édition de graphes sur un exemple simple afin de comprendre son fonctionnement. Prenons les deux graphes de la figure \ref{fig:exemple-2-graphes-GED}, avec les coûts suivants pour chaque type d'opération :
+\begin{itemize}
+\item $c_{ns}(n,v)=1$ si les étiquettes des sommets $n$ et $v$ sont différentes, $c_{ns}(n,v)=0$ si les étiquettes des sommets $n$ et $v$ sont identiques;
+\item $c_{nd}(n)=c_{ni}(n)=2$, les coûts de suppression et d'insertion du sommet $n$;
+\item $c_{es}(i,j)=1$ si les étiquettes des arcs $i$ et $j$ sont différentes, $c_{es}(i,j)=0$ si les étiquettes des arcs $i$ et $j$ sont identiques;
+\item $c_{ed}(i)=c_{ei}(i)=1$, les coût de suppression et d'insertion de l'arc $i$.\\
+\end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=1.5]{images/exemple-2-graphes-GED.pdf}
+	\caption{Exemple de deux graphes \citep{Bunke1983}.}%
+	\label{fig:exemple-2-graphes-GED}
+\end{figure}
+
+La figure \ref{fig:exemple-2-graphes-GED-Open} représente l'arbre de recherche qui permettra de trouver un appariement inexact optimal entre les graphes $g_{1}$ et $g_{2}$. L'état initial étant l'ensemble vide, les états intermédiaires représentent les chemins d'édition partiels et les états finaux (les feuilles de l'arbre) sont les chemins d'édition complets. Les coûts des transformations sont affichés à l'intérieur des cercles. L'un des chemins d'édition complets qui obtient le coût minimal est la distance d'édition entre les deux graphes.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.8]{images/exemple-2-graphes-GED-Open.pdf}
+	\caption{L'espace de recherche pour l'appariement des deux graphes $g_{1}$ et $g_{2}$.}%
+	\label{fig:exemple-2-graphes-GED-Open}
+\end{figure}
+
+
+
+\section{Conclusion}
+%%%%%%%%%%%%%%%%%%%
+Dans ce chapitre, nous nous sommes intéressé à .....
+

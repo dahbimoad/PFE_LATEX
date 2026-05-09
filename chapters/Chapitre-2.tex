@@ -1,0 +1,206 @@
+\linespread{1.1}         			% Palatino needs more leading (space between lines)
+\chapter{Etude de l'existant et proposition d'actions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{Chapitre-2}
+\minitoc
+\linespread{1.2}         			% Palatino needs more leading (space between lines)
+\newpage
+
+\section{Introduction}
+%%%%%%%%%%%%%%%%%
+......
+
+
+\section{Etude préliminaire du projet}
+%-------------------------------------
+\label{sec:etudePreliminaireProjet} % C'est une référence à la section.
+
+Nous allons profiter de cette section pour présenter l'écriture en LaTeX de quelques notions et définitions. Pour cela, nous allons reprendre quelques définitions qui sont disponibles dans \citep{Preux2011} :
+
+\subsection{Exemple 1}
+%^^^^^^^^^^^^^^^^^^^^
+\noindent Soit :
+\begin{itemize}
+	\item $\mathcal{X}$ : un ensemble de données ou d'objets et $N=|\mathcal{X}|$;
+	\item $\mathcal{D}$ : espace contenant toutes les données. Nous avons la relation $\mathcal{X} \subset \mathcal{D}$;
+	\item $\mathcal{A}$ : ensemble des attributs caractérisant chacune des données et $P=|\mathcal{A}|$;
+	\item $\mathcal{E}$ : ensemble des étiquettes. $\forall e \in \mathcal{E}$, $e$ est appelé une \og classe\fg{} ou \og étiquette\fg.\\
+\end{itemize}
+
+\noindent \textbf{Définition 1} : Soit un ensemble $\mathcal{X}$ de $N$ données étiquetées. Chaque donnée $x_{i}$ est caractérisée par $P$ attributs et par sa classe $e_{i} \in \mathcal{E}$. Dans un problème de classification, la classe prend sa valeur parmi un ensemble fini. Le problème consiste alors, en s'appuyant sur l'ensemble d'exemples $\mathcal{X}=\{(x_{i},e_{i})_{i \in\{1,...,N\}}\}$, à prédire la classe de toute nouvelle donnée $x \in \mathcal{D}$.\\
+
+\noindent \textbf{Définition 2} : Un \og exemple\fg{} est une donnée pour laquelle on dispose de sa classe.\\
+
+\noindent \textbf{Définition 3} : Une \og classe\fg{} regroupe un ensemble de données ayant des attributs ou caractéristiques semblables.\\
+
+\noindent \textbf{Définition 4} : Un \og classifieur \fg{} est un algorithme qui, à partir d'un ensemble d'exemples, prédit la classe de toute nouvelle donnée.\\
+
+\noindent \textbf{Définition 5} : Une \og base d'apprentissage \fg{} est un ensemble de classes. Chaque classe est composée de données préalablement étiquetées de façon identique.\\
+
+\subsection{Exemple 2}
+%^^^^^^^^^^^^^^^^^^^^
+....
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Etude de l'infrastructure et de l'existant}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dans les sections suivantes, nous allons présenter d'autres commandes LaTeX pour l'affichage des figures et des algorithmes.
+
+
+\subsection{Exemple de formule mathématique}
+%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pour exprimer cette notion de proximité entre les données de la base d'apprentissage, une distance est associée au $k$ppv. D'un point de vu mathématiques, une distance est une application définie par :
+\begin{center}
+	$\delta:$ $\mathcal{D}\times \mathcal{D} \rightarrow \mathbb{R}^{+}$\\
+	\hspace{1cm} $(x,y)\rightarrow  \delta(x,y)$\\
+\end{center}
+
+\noindent qui respecte les 3 propriétés suivantes $ \forall x,y,z \in \mathcal{D}$ :
+\begin{itemize}
+	\item $ \delta(x,y)=0 \Longleftrightarrow x=y$
+	\item $ \delta(x,y)=\delta(y,x)$
+	\item $ \delta(x,y)+\delta(y,z)\geq \delta(x,z)$\\
+\end{itemize} 
+
+Dans le cas des attributs numériques, un exemple de distance couramment utilisée est la distance euclidienne :
+
+\begin{center}
+	\fbox{ % pour encadrer la formule
+	\begin{minipage}{0.4\textwidth}
+		$\forall x,y \in \mathbb{R}^{n} \ \ \delta (x,y)=\sqrt{\sum\limits_{i=1}^{n}(x_{i}-y_{i})^2}$\\
+	\end{minipage}
+			}
+\end{center}
+
+\subsection{Un exemple d'algorithme 1}
+%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Cela se traduit par l'algorithme suivant :
+
+\begin{algorithm}[H]
+  \caption{Les $k$ plus proches voisins}
+  \label{alg:k-ppv}
+  \begin{algorithmic}[1]
+    \REQUIRE \hspace{1cm}\\
+    	$x \in \mathcal{D}$, avec $\mathcal{D}$ un ensemble de données;\\
+    	$\mathcal{X}$ un ensemble de données étiquetées;\\
+    	$k \in \{1,...,N\}$;\\
+    	$\delta$ une mesure de similarité définie sur $\mathcal{D}$.\\
+ 			\vspace{0.3cm}
+ 			
+    \ENSURE \hspace{1cm}\\
+    	La classe de $x$.\\
+ 			\vspace{0.3cm}
+							
+		\FORALL{$x_{i} \in \mathcal{X}$}
+		\STATE calculer $\delta(x_{i},x)$ 
+		\ENDFOR    				
+ 			\vspace{0.3cm}
+ 			
+		\FORALL{$\kappa \in \{1,...,k\}$}
+		\STATE kppv[$\kappa$]$\leftarrow argmin_{x_{i}\in\mathcal{X}}$ $\delta(x_{i},x)$
+		\STATE $\delta(x_{i},x)\leftarrow +\infty$
+		\ENDFOR    				
+ 			\vspace{0.3cm}
+
+		\STATE \textbf{retourner} La classe de $x$ à partir de la classe majoritaire des exemples qui sont stockés dans le tableau kppv.
+
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Un exemple d'algorithme 2}
+%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+\noindent L'algorithme correspondant à cette phase pour l'exemple des messages spam est :
+
+\begin{algorithm}[H]
+  \caption{{\small Phase d'apprentissage bayésienne naïve : spam et non-spam}}
+  \label{alg:RBN-01}
+  \begin{algorithmic}[1]
+    \REQUIRE \hspace{1cm}\\
+    	Liste de messages des catégories spam et non-spam.\\
+ 			\vspace{0.3cm}
+ 			
+    \ENSURE \hspace{1cm}\\
+    	Liste de mots avec leurs probabilités respectives pour les catégories spam et non-spam.\\
+ 			\vspace{0.3cm}
+			
+		\FORALL {message de Liste de messages}
+		\FORALL {mot de message}
+		\IF {message est un spam}
+		\STATE \textbf{calculer} $p(mot=rencontr$\textit{é}$|cat$\textit{é}$gorie = spam)$
+		\ELSE
+		\STATE \textbf{calculer} $p(mot=rencontr$\textit{é}$|cat$\textit{é}$gorie = non-spam)$
+		\ENDIF
+		\ENDFOR
+		\ENDFOR 				
+
+  \end{algorithmic}
+\end{algorithm}
+
+Pendant la phase de décision, le classifieur est capable d'identifier, avec plus ou moins de succès, si un message correspond à un spam ou non. Donc, pour chaque message $M$, il détermine les probabilités $p(cat$\textit{é}$gorie=spam|message = M)$ et $p(cat$\textit{é}$gorie=non-spam|message = M)$. Sachant que le message $M$ peut être décomposé en $n$ mots $m_{i}$ indépendants ($1\leq i\leq n$), nous avons :
+
+
+$p(cat$\textit{é}$gorie=spam|message = M)$=$\prod\limits^{n}_{i=1} p(cat$\textit{é}$gorie=spam|m_{i}=rencontr$\textit{é}$)$
+
+\noindent Ensuite, grâce à la règle de Bayes et à la phase d'apprentissage, il est possible de connaître la valeur de chaque terme de ce produit :
+
+{\small $p(cat$\textit{é}$gorie=spam|m_{i}=rencontr$\textit{é}) =} $\frac{p(categorie=spam,\; m_{i}=rencontre)}{p(m_{i}=rencontre)}$
+
+\hspace{6cm} $=\frac{p(m_{i}=rencontre|categorie=spam)p(categorie=spam)}{p(m_{i}=rencontre)}$
+
+\noindent Finalement, le message $M$ sera considéré comme un spam si : 
+
+{\small $p(cat$\textit{é}$gorie=spam|message = M) > p(cat$\textit{é}$gorie=non-spam|message = M)$}, 
+
+\noindent et comme non-spam dans le cas contraire.
+
+\noindent L'algorithme correspondant est :
+
+\begin{algorithm}[H]
+  \caption{Phase de classification bayésienne naïve : détection de spam}
+  \label{alg:RBN-02}
+  \begin{algorithmic}[1]
+    \REQUIRE \hspace{1cm}\\
+    	$m$ : le message à vérifier.\\
+ 			\vspace{0.3cm}
+ 			
+    \ENSURE \hspace{1cm}\\
+    	La catégorie du message, spam ou non-spam.\\
+ 			\vspace{0.3cm}
+			
+		\STATE $p_{spam}\leftarrow p(cat$\textit{é}$gorie = spam|message = m)$
+		\STATE $p_{non-spam} \leftarrow p(cat$\textit{é}$gorie = non-spam|message = m)$
+		\IF {$p_{non-spam}\geq p_{spam}$}
+		\STATE \textbf{retourner} catégorie non-spam
+		\ELSE
+		\STATE \textbf{retourner} catégorie spam
+		\ENDIF
+  \end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Exemple de plusieurs images dans la même figure}
+Le classifieur SVM nécessite une phase d'apprentissage qui consiste à trouver l'Hyperplan Séparateur Optimal qui sépare les deux catégories de classes (figure : \ref{fig:svm-01}). Chaque exemple étant alors représenté par un vecteur de descripteurs de dimension $n$. Pendant cette phase, le classifieur recherche l'hyperplan H qui sépare les deux catégories de données de manière à ce que la distance entre les deux hyperplans H+ et H- (voir figure : \ref{fig:svm-02}) soit la plus grande possible. L'écart entre les deux hyperplans H+ et H- est appelé la « marge ».
+
+\begin{figure} [htbp]
+   \begin{minipage}[c]{.46\linewidth}
+      \includegraphics[scale=0.70]{images/svm-01.pdf}
+ 			\caption{Exemple d'un SVM linéaire}
+			\label{fig:svm-01}
+  \end{minipage} \hfill
+   \begin{minipage}[c]{.46\linewidth}
+      \includegraphics[scale=0.70]{images/svm-02.pdf}
+  		\caption{Exemple de marge d'un SVM linéaire}
+			\label{fig:svm-02}
+	\end{minipage}
+\end{figure}
+
+
+\section{Conclusion}
+%%%%%%%%%%%%%%%%%%%
+Dans ce chapitre, nous avons présenté quelques méthodes ....
+
