@@ -17,6 +17,10 @@ same on every editor, terminal and OS. The actual report source files
 
 ## 1. TL;DR -- the ONE command
 
+> First time on a brand-new Windows PC? Read **[SETUP.md](SETUP.md)** for the
+> full from-zero install (Git + MiKTeX + Strawberry Perl + latexmk + clone +
+> first build). Otherwise stick to this section.
+
 From the project root, just run:
 
 ```bash
@@ -46,7 +50,9 @@ rm -rf build output
 .
 |-- Memoire.tex            # main document (entry point) -- DO NOT RENAME
 |-- .latexmkrc             # build configuration (read automatically by latexmk)
+|-- .gitignore             # ignores build/, aux files, OS junk, etc.
 |-- README.md              # this file
+|-- SETUP.md               # from-zero install guide for a fresh Windows PC
 |
 |-- chapters/              # all written content (.tex)
 |   |-- Abstract.tex       # Resume + Abstract (FR/EN)
@@ -94,6 +100,10 @@ rm -rf build output
 ---
 
 ## 3. Requirements & install
+
+> On a brand-new Windows machine, follow **[SETUP.md](SETUP.md)** instead of
+> this section -- it's a step-by-step guide (Git, MiKTeX, Strawberry Perl,
+> latexmk, clone, first build). The summary below is for everyone else.
 
 You need a TeX distribution and `latexmk`.
 
