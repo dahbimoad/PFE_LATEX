@@ -158,7 +158,7 @@ start output/*.pdf
 # 2. Then in Git Bash:
 cd ~/Desktop
 git clone https://github.com/dahbimoad/PFE_LATEX.git PFE
-cd Memoire
+cd PFE
 mpm --install=latexmk
 latexmk
 start output/*.pdf
