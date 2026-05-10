@@ -157,7 +157,7 @@ start output/*.pdf
 # 1. Install: Git, MiKTeX, Strawberry Perl (download + run installers)
 # 2. Then in Git Bash:
 cd ~/Desktop
-git clone <REPO_URL> Memoire
+git clone https://github.com/dahbimoad/PFE_LATEX.git PFE
 cd Memoire
 mpm --install=latexmk
 latexmk
